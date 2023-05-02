@@ -3,13 +3,19 @@ import { Input } from '../filter/FilterField.styled';
 import { Button, PhoneBook } from './Form.styled';
 // import { useDispatch } from 'react-redux';
 import { useAddContactMutation } from 'components/redux/query';
+import { useGetContactsQuery } from 'components/redux/query';
 
 export const Form = () => {
   const [addContact] = useAddContactMutation();
   // const dispatch = useDispatch();
+  const { data = [] } = useGetContactsQuery();
 
   const submitForm = e => {
     e.preventDefault();
+    if (data.find(contact => contact.name === e.target.name.value)) {
+      alert('You have this contact already');
+      return e.currentTarget.reset();
+    }
     const contact = {
       name: e.target.name.value,
       phone: e.target.number.value,
